@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+          cache: true
+
+      - name: Lint
+        run: make lint
+
+  test:
+    name: Test (${{ matrix.container-runtime }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        container-runtime:
+          - docker
+          - podman
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+          cache: true
+
+      - name: Configure Podman
+        if: matrix.container-runtime == 'podman'
+        run: |
+          sudo systemctl enable --now podman.socket
+
+          echo "DOCKER_HOST=unix:///run/podman/podman.sock" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
+
+          sudo podman version
+
+      - name: Verify container runtime
+        run: |
+          if [ "${{ matrix.container-runtime }}" = "podman" ]; then
+            sudo podman ps || exit 1
+            echo "✓ Podman is configured and running"
+          else
+            docker ps || exit 1
+            echo "✓ Docker is configured and running"
+          fi
+
+      - name: Run tests
+        run: make test

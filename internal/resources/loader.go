@@ -6,18 +6,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/lburgazzoli/testcontainers-envtest/internal/resources/filter"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
+
+	"github.com/lburgazzoli/testcontainers-envtest/internal/resources/filter"
 )
 
 func loadFromFile(
 	filePath string,
 	objectFilter filter.ObjectFilter,
 ) ([]unstructured.Unstructured, error) {
-	data, err := os.ReadFile(filePath)
+	data, err := os.ReadFile(filePath) //nolint:gosec // paths come from trusted test configuration
 	if err != nil {
 		return nil, fmt.Errorf("failed to read file %s: %w", filePath, err)
 	}

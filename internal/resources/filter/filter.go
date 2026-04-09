@@ -1,9 +1,10 @@
 package filter
 
 import (
+	"sigs.k8s.io/controller-runtime/pkg/client"
+
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 // ObjectFilter is a predicate for filtering Kubernetes objects.

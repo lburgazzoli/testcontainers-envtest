@@ -6,12 +6,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lburgazzoli/testcontainers-envtest/internal/container"
 	"github.com/spf13/viper"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/utils/ptr"
+
+	"github.com/lburgazzoli/testcontainers-envtest/internal/container"
 )
 
 const (

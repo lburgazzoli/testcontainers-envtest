@@ -53,7 +53,7 @@ func Start(
 		},
 		WaitingFor: wait.ForHTTP("/healthz").
 			WithPort(apiServerPort).
-			WithTLS(true, &tls.Config{InsecureSkipVerify: true}).
+			WithTLS(true, &tls.Config{InsecureSkipVerify: true}). //nolint:gosec // health check against local test container
 			WithStartupTimeout(120 * time.Second).
 			WithStatusCodeMatcher(func(status int) bool {
 				return status == 200

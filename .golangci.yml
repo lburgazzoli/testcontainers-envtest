@@ -1,0 +1,43 @@
+version: "2"
+linters:
+  default: all
+  disable:
+    - wsl
+    - wsl_v5
+    - varnamelen
+    - exhaustruct
+    - funlen
+    - ireturn
+    - revive
+    - lll
+    - depguard
+    - err113
+    - forbidigo
+    - paralleltest
+    - nlreturn
+    - mnd
+    - cyclop
+    - forcetypeassert
+    - noinlineerr
+    - gocognit
+    - maintidx
+    - nestif
+    - gochecknoglobals
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - goimports
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - blank
+        - prefix(k8s.io)
+        - blank
+        - prefix(github.com/lburgazzoli/testcontainers-envtest)
+        - blank
+        - dot
+      custom-order: true

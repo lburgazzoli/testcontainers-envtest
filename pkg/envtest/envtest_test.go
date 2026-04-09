@@ -4,16 +4,17 @@ import (
 	"os"
 	"testing"
 
-	. "github.com/onsi/gomega"
-
-	envtest "github.com/lburgazzoli/testcontainers-envtest/pkg/envtest"
-	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	corev1 "k8s.io/api/core/v1"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	k8sscheme "k8s.io/client-go/kubernetes/scheme"
+
+	envtest "github.com/lburgazzoli/testcontainers-envtest/pkg/envtest"
+
+	. "github.com/onsi/gomega"
 )
 
 func TestBasicConnectivity(t *testing.T) {

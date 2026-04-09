@@ -7,18 +7,19 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/lburgazzoli/testcontainers-envtest/internal/cert"
-	"github.com/lburgazzoli/testcontainers-envtest/internal/container"
-	"github.com/lburgazzoli/testcontainers-envtest/internal/gvk"
-	"github.com/lburgazzoli/testcontainers-envtest/internal/resources"
-	"github.com/lburgazzoli/testcontainers-envtest/internal/resources/filter"
 	"github.com/testcontainers/testcontainers-go"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/rest"
-	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	"github.com/lburgazzoli/testcontainers-envtest/internal/cert"
+	"github.com/lburgazzoli/testcontainers-envtest/internal/container"
+	"github.com/lburgazzoli/testcontainers-envtest/internal/gvk"
+	"github.com/lburgazzoli/testcontainers-envtest/internal/resources"
+	"github.com/lburgazzoli/testcontainers-envtest/internal/resources/filter"
 )
 
 var (
@@ -252,7 +253,7 @@ func (e *Environment) buildRestConfig(ctx context.Context) error {
 	}
 
 	e.cfg = &rest.Config{
-		Host: fmt.Sprintf("https://localhost:%s", port),
+		Host: "https://localhost:" + port,
 		TLSClientConfig: rest.TLSClientConfig{
 			CAData:   e.certData.CACert,
 			CertData: e.certData.ClientCert,

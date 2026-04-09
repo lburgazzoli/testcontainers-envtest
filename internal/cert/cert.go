@@ -160,7 +160,7 @@ func generateSignedCert(
 	subject pkix.Name,
 	sans []string,
 	extKeyUsage []x509.ExtKeyUsage,
-) (certPEM []byte, keyPEM []byte, err error) {
+) ([]byte, []byte, error) {
 	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to generate key: %w", err)
@@ -203,13 +203,13 @@ func generateSignedCert(
 	return encodeCert(certDER), pem.EncodeToMemory(&pem.Block{Type: "EC PRIVATE KEY", Bytes: keyDER}), nil
 }
 
-func generateRSAKeyPair() (keyPEM []byte, pubPEM []byte, err error) {
+func generateRSAKeyPair() ([]byte, []byte, error) {
 	key, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to generate RSA key: %w", err)
 	}
 
-	keyPEM = pem.EncodeToMemory(&pem.Block{
+	keyData := pem.EncodeToMemory(&pem.Block{
 		Type:  "RSA PRIVATE KEY",
 		Bytes: x509.MarshalPKCS1PrivateKey(key),
 	})
@@ -218,12 +218,12 @@ func generateRSAKeyPair() (keyPEM []byte, pubPEM []byte, err error) {
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to marshal public key: %w", err)
 	}
-	pubPEM = pem.EncodeToMemory(&pem.Block{
+	pubData := pem.EncodeToMemory(&pem.Block{
 		Type:  "PUBLIC KEY",
 		Bytes: pubBytes,
 	})
 
-	return keyPEM, pubPEM, nil
+	return keyData, pubData, nil
 }
 
 func encodeCert(der []byte) []byte {
@@ -233,7 +233,7 @@ func encodeCert(der []byte) []byte {
 func encodeECKey(key *ecdsa.PrivateKey) ([]byte, error) {
 	der, err := x509.MarshalECPrivateKey(key)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to marshal EC key: %w", err)
 	}
 	return pem.EncodeToMemory(&pem.Block{Type: "EC PRIVATE KEY", Bytes: der}), nil
 }
