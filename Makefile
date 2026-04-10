@@ -53,10 +53,10 @@ image/push: image/build
 	docker push $(IMAGE_REF)
 
 .PHONY: test
-test: image/build
+test:
 	@$(configure_container_runtime) && \
-	ENVTEST_IMAGE_REPOSITORY=$(IMAGE_REPOSITORY) \
-	ENVTEST_KUBERNETES_VERSION=$(IMAGE_TAG) \
+	ENVTEST_IMAGE_REPOSITORY=$${ENVTEST_IMAGE_REPOSITORY:-$(IMAGE_REPOSITORY)} \
+	ENVTEST_KUBERNETES_VERSION=$${ENVTEST_KUBERNETES_VERSION:-$(IMAGE_TAG)} \
 	TESTCONTAINERS_RYUK_DISABLED=$${TESTCONTAINERS_RYUK_DISABLED:-false} \
 	go test -v -count=1 -timeout=300s ./pkg/envtest/
 
