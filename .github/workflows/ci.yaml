@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: "go.mod"
           cache: true
@@ -34,10 +34,10 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: "go.mod"
           cache: true
@@ -45,12 +45,15 @@ jobs:
       - name: Configure Podman
         if: matrix.container-runtime == 'podman'
         run: |
+          # Enable Podman socket in rootful mode
+          # Rootless Podman cannot properly handle privileged containers
           sudo systemctl enable --now podman.socket
 
           echo "DOCKER_HOST=unix:///run/podman/podman.sock" >> $GITHUB_ENV
           echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
 
           sudo podman version
+          sudo podman info
 
       - name: Verify container runtime
         run: |
