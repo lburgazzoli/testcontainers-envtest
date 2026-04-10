@@ -39,10 +39,7 @@ jobs:
           REPOSITORY="ttl.sh/$(uuidgen)"
           TAG="1h"
 
-          docker build \
-            --build-arg ENVTEST_VERSION=${KUBERNETES_VERSION} \
-            -t "${REPOSITORY}:${TAG}" \
-            image/
+          make image/build IMAGE_REPOSITORY="${REPOSITORY}" IMAGE_TAG="${TAG}"
 
           docker push "${REPOSITORY}:${TAG}"
 
